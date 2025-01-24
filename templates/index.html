@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>YouTube Transcript Fetcher</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+
+<div class="container">
+    <h1>YouTube Transcript Fetcher</h1>
+    <form method="POST">
+        <input type="text" name="video_url" placeholder="Enter YouTube Video URL" value="{{ video_url }}" required>
+        <br><br>
+        <button type="submit">Continue</button>
+    </form>
+
+    <div class="content-wrapper">
+        <!-- Transcript Panel -->
+        <div class="transcript-panel">
+            {% if transcript %}
+                <h3>Transcript:</h3>
+                <p id="transcript-text">{{ transcript | join('<br>') | safe }}</p>  <!-- Display the transcript in a readable format -->
+            {% endif %}
+        </div>
+    </div>
+    
+    <!-- Copy Button Outside Transcript Panel -->
+    {% if transcript %}
+        <button id="copy-btn" onclick="copyTranscript()">Copy Transcript</button>
+    {% endif %}
+    
+</div>
+
+<!-- Link to External JavaScript File -->
+<script src="{{ url_for('static', filename='script.js') }}"></script>
+
+<!-- Clipboard Script -->
+<script>
+    function copyTranscript() {
+        var transcriptText = document.getElementById("transcript-text").innerText;  // Get transcript text
+        var textarea = document.createElement("textarea");
+        textarea.value = transcriptText;  // Set the transcript as the value
+        document.body.appendChild(textarea);  // Append textarea to body
+        textarea.select();  // Select the content
+        document.execCommand("copy");  // Execute the copy command
+        document.body.removeChild(textarea);  // Remove textarea from DOM
+        alert("Transcript copied to clipboard!");  // Provide feedback to the user
+    }
+</script>
+
+</body>
+</html>
